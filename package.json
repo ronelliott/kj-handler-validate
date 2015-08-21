@@ -1,6 +1,6 @@
 {
   "name": "kj-handler-validate",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Validation handler for the kj webapp framework.",
   "author": "Ron Elliott <ron@elliott.im>",
   "license": "ISC",
