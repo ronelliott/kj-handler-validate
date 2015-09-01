@@ -13,25 +13,30 @@ function details(err) {
         }, {})
 }
 
-module.exports = function(joi, params) {
-    var schema = params.schema || {},
-        shouldInject = (is.boolean(params.inject) ? params.inject : true) && !is.null(params.inject),
-        injectName = is.string(params.inject) ? params.inject : 'body',
-        sourcePath = params.source || 'req.body',
+module.exports = function($joi, $opts) {
+    var schema = $opts.schema || {},
+        shouldInject = (is.boolean($opts.inject) ? $opts.inject : true) && !is.null($opts.inject),
+        injectName = is.string($opts.inject) ? $opts.inject : 'body',
+        sourcePath = $opts.source || 'req.body',
         sourceObjName = sourcePath.split('.')[0];
 
-    schema = schema.isJoi ? schema : joi.object().keys(schema);
+    schema = schema.isJoi ? schema : $joi.object().keys(schema);
 
-    return function(resolver, res, next) {
+    return function(err, $resolver, $res, $next) {
+        if (err) {
+            $next();
+            return;
+        }
+
         var sourceObj = {};
-        sourceObj[sourceObjName] = resolver(sourceObjName);
+        sourceObj[sourceObjName] = $resolver(sourceObjName);
         var source = objectPath.get(sourceObj, sourcePath);
 
         schema.validate(source,
             function(err, params) {
                 if (err) {
-                    res.status('bad request');
-                    next({
+                    $res.status('bad request');
+                    $next({
                         error: err.name,
                         details: details(err)
                     });
@@ -39,10 +44,10 @@ module.exports = function(joi, params) {
                 }
 
                 if (shouldInject) {
-                    resolver.add(injectName, params);
+                    $resolver.add(injectName, params);
                 }
 
-                next();
+                $next();
             });
     };
 };

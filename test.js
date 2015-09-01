@@ -4,7 +4,7 @@ var should = require('should'),
     sinon = require('sinon'),
     joi = require('joi'),
     reflekt = require('reflekt'),
-    factory = require('./view');
+    handler = require('./handler');
 
 describe('validate', function() {
     it('should use `req.body` if no source object path is given', function(done) {
@@ -17,7 +17,7 @@ describe('validate', function() {
                 }
             };
 
-        factory(joi, params)(resolver, res, function(err) {
+        handler(joi, params)(null, resolver, res, function(err) {
             should(err).not.be.ok();
             should(resolver('body')).eql({ foo: 'foo', bar: 'bar' });
             done();
@@ -35,7 +35,7 @@ describe('validate', function() {
                 }
             };
 
-        factory(joi, params)(resolver, res, function(err) {
+        handler(joi, params)(null, resolver, res, function(err) {
             should(err).not.be.ok();
             should(resolver('body')).eql({ foo: 'foo', bar: 'bar' });
             done();
@@ -52,7 +52,7 @@ describe('validate', function() {
                 }
             };
 
-        factory(joi, params)(resolver, res, function(err) {
+        handler(joi, params)(null, resolver, res, function(err) {
             should(err).not.be.ok();
             should(resolver('body')).eql({ foo: 'foo', bar: 'bar' });
             done();
@@ -70,7 +70,7 @@ describe('validate', function() {
                 }
             };
 
-        factory(joi, params)(resolver, res, function(err) {
+        handler(joi, params)(null, resolver, res, function(err) {
             should(err).not.be.ok();
             should(resolver('flubber')).eql({ foo: 'foo', bar: 'bar' });
             done();
@@ -88,7 +88,7 @@ describe('validate', function() {
                 }
             };
 
-        factory(joi, params)(resolver, res, function(err) {
+        handler(joi, params)(null, resolver, res, function(err) {
             should(err).not.be.ok();
             should(resolver('body')).equal(undefined);
             done();
@@ -105,7 +105,7 @@ describe('validate', function() {
                 }
             };
 
-        factory(joi, params)(resolver, res, function(err) {
+        handler(joi, params)(null, resolver, res, function(err) {
             should(err).be.ok();
             res.status.calledWith('bad request').should.equal(true);
             done();
@@ -122,7 +122,7 @@ describe('validate', function() {
                 }).without('foo', 'bar')
             };
 
-        factory(joi, params)(resolver, res, function(err) {
+        handler(joi, params)(null, resolver, res, function(err) {
             should(err).not.be.ok();
             should(resolver('body')).eql({ foo: 'foo' });
             done();
