@@ -1,8 +1,8 @@
 'use strict';
 
-var _ = require('underscore'),
-    is = require('is'),
-    objectPath = require('object-path');
+const _ = require('underscore'),
+      is = require('is'),
+      objectPath = require('object-path');
 
 function details(err) {
     return err.details
